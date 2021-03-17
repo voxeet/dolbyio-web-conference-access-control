@@ -1,0 +1,23 @@
+{
+  "name": "dolbyio-web-conference-access-control",
+  "version": "1.0.0",
+  "description": "Sample application that uses the Web SDK with Enhanced Conference Access Control",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dolbyio-samples/dolbyio-web-conference-access-control.git"
+  },
+  "author": "Fabien Lavocat",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dolbyio-samples/dolbyio-web-conference-access-control/issues"
+  },
+  "homepage": "https://github.com/dolbyio-samples/dolbyio-web-conference-access-control#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "https": "^1.0.0"
+  }
+}
