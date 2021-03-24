@@ -14,7 +14,11 @@ const main = async () => {
     console.log(stream);
     console.log(stream.getTracks());
     
-    addVideoNode(participant, stream);
+    if (stream.getVideoTracks().length) {
+      // Only add the video node if there is a video track
+      addVideoNode(participant, stream);
+    }
+    
     addParticipantNode(participant);
   });
 
@@ -38,7 +42,12 @@ const main = async () => {
     console.log(stream);
     console.log(stream.getTracks());
     
-    addVideoNode(participant, stream);
+    if (stream.getVideoTracks().length) {
+      // Only add the video node if there is a video track
+      addVideoNode(participant, stream);
+    } else {
+      removeVideoNode(participant);
+    }
   });
 
   // Get an access token from the backend
