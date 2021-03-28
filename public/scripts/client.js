@@ -54,7 +54,7 @@ const main = async () => {
   const url = '/access-token';
   fetch(url)
     .then(d => d.json())
-    .then(jwt => VoxeetSDK.initializeToken(jwt.access_token, () => fetch(url).then(jwt => jwt.access_token)) )
+    .then(jwt => VoxeetSDK.initializeToken(jwt.access_token, () => fetch(url).then(d => d.json()).then(jwt => jwt.access_token)) )
     .then(() => VoxeetSDK.session.open({ name: randomName, externalId: randomName }).then(() => initUI()));
 
 };
