@@ -225,7 +225,7 @@ const addVideoNode = (participant, stream) => {
   navigator.attachMediaStream(videoNode, stream);
 };
 
-// Remove the video streem from the web page
+// Remove the video stream from the web page
 const removeVideoNode = (participant) => {
   let videoNode = document.getElementById('video-' + participant.id);
 
