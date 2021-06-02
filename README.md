@@ -17,7 +17,7 @@ npm install
 
 Create a new application in your dashboard on dolby.io, then go to the settings, check **Enhanced Conference Access Control** in the Security and click SAVE CHANGES.
 
-![](enhanced-conference-access-control.png)
+![Enhanced Conference Access Control](enhanced-conference-access-control.png)
 
 In the `server.js` file, locate and replace the **CONSUMER_KEY** and **CONSUMER_SECRET** with what's provided to you in the dashboard.
 
@@ -27,13 +27,19 @@ const CONSUMER_KEY = 'CONSUMER_KEY';
 const CONSUMER_SECRET = 'CONSUMER_SECRET';
 ```
 
-Now, start the project with the command:
+Now, start the project with the npm command:
 
 ```bash
 npm start
 ```
 
-Then you can access the web page at `http://localhost:8081`. You can change the port number at the end of the file `server.js`.
+Or directly with the node command:
+
+```bash
+node server.js --port 8081
+```
+
+Then you can access the web page at `http://localhost:8081`. You can change the port number with the flag `--port` in the node command.
 
 ## Use this project
 

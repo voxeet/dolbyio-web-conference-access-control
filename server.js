@@ -1,6 +1,9 @@
 var express = require('express');
 const https = require("https");
 
+const { Command } = require('commander');
+const program = new Command();
+
 var app = express();
 
 // Parse POST requests as JSON payload
@@ -113,22 +116,43 @@ const createConferenceAsync = async (alias, ownerExternalId) => {
 // See: https://dolby.io/developers/interactivity-apis/reference/rest-apis/conference#operation/postConferenceInvite
 const getInvitationAsync = async (conferenceId, externalId) => {
     const participants = {};
-    participants[externalId] = {
-        permissions: [
-            //"INVITE",
-            "JOIN",
-            "SEND_AUDIO",
-            "SEND_VIDEO",
-            "SHARE_SCREEN",
-            //"SHARE_VIDEO",
-            //"SHARE_FILE",
-            "SEND_MESSAGE",
-            //"RECORD",
-            //"STREAM",
-            //"KICK",
-            //"UPDATE_PERMISSIONS"
-        ]
-    };
+
+    if (conferenceId == '6c471277-86d8-4720-8be7-121aff08c6b5') {
+        participants[externalId] = {
+            permissions: [
+                "INVITE",
+                "JOIN",
+                "SEND_AUDIO",
+                "SEND_VIDEO",
+                "SHARE_SCREEN",
+                "SHARE_VIDEO",
+                "SHARE_FILE",
+                "SEND_MESSAGE",
+                //"RECORD",
+                //"STREAM",
+                //"KICK",
+                //"UPDATE_PERMISSIONS"
+            ]
+        };
+    } else {
+        participants[externalId] = {
+            permissions: [
+                //"INVITE",
+                "JOIN",
+                //"SEND_AUDIO",
+                "SEND_VIDEO",
+                "SHARE_SCREEN",
+                //"SHARE_VIDEO",
+                //"SHARE_FILE",
+                "SEND_MESSAGE",
+                //"RECORD",
+                //"STREAM",
+                //"KICK",
+                //"UPDATE_PERMISSIONS"
+            ]
+        };
+    }
+
 
     const body = JSON.stringify({
         participants: participants
@@ -192,9 +216,22 @@ app.post('/get-invited', function (request, response) {
 });
 
 
-// Starts an HTTP server on port 8081
-var server = app.listen(8081, function () {
+// Extract the port number from the command argument
+program.option('-p, --port <portNumber>', 'Port number to start the HTTP server on.');
+program.parse(process.argv);
+
+let portNumber = 8081; // Default port number
+const options = program.opts();
+if (options.port) {
+    const p = parseInt(options.port, 10);
+    if (!isNaN(p)) {
+        portNumber = p;
+    }
+}
+
+// Starts an HTTP server
+var server = app.listen(portNumber, function () {
    var host = server.address().address
    var port = server.address().port
-   console.log("Dolby.io app listening at http://%s:%s", host, port)
+   console.log("Dolby.io sample app listening at http://%s:%s", host, port)
 });

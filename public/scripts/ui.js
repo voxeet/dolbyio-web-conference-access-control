@@ -67,7 +67,7 @@ const initUI = () => {
     };
 
     // Request our backend to create a conference
-    fetch('/conference', options)
+    fetch('conference', options)
       .then(d => d.json())
       .then(conference => joinConference(conference.conferenceId, conference.ownerToken))
       .catch((e) => console.log(e));
@@ -89,7 +89,7 @@ const initUI = () => {
         };
     
         // Request our backend for an invitation
-        fetch('/get-invited', options)
+        fetch('get-invited', options)
           .then(d => d.json())
           .then(invite => joinConference(conference.id, invite.accessToken))
           .catch((e) => console.log(e));
