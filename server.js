@@ -1,8 +1,11 @@
 var express = require('express');
 const https = require("https");
+const dotenv = require('dotenv');
 
 const { Command } = require('commander');
 const program = new Command();
+
+dotenv.config();
 
 var app = express();
 
@@ -12,9 +15,12 @@ app.use(express.json());
 // Serve static files
 app.use(express.static('public'))
 
-// Enter your Consumer Key and Secret from the dolby.io dashboard
-const CONSUMER_KEY = 'CONSUMER_KEY';
-const CONSUMER_SECRET = 'CONSUMER_SECRET';
+const CONSUMER_KEY = process.env.CONSUMER_KEY ?? '';
+const CONSUMER_SECRET = process.env.CONSUMER_SECRET ?? '';
+
+if (CONSUMER_KEY.length <= 0 || CONSUMER_SECRET.length <= 0) {
+    throw new Error('The Consumer Key and/or Secret are missing!');
+}
 
 /**
  * Sends a POST request
@@ -79,19 +85,19 @@ const getAccessTokenAsync = (hostname, path) => {
     return postAsync(hostname, path, headers, body);
 }
 
-// See: https://dolby.io/developers/interactivity-apis/reference/rest-apis/authentication#operation/postOAuthToken
+// See: https://docs.dolby.io/interactivity/reference/authentication#postoauthtoken-1
 const getClientAccessTokenAsync = () => {
     console.log('Get Client Access Token');
     return getAccessTokenAsync('session.voxeet.com', '/v1/oauth2/token');
 }
 
-// See: https://dolby.io/developers/interactivity-apis/reference/rest-apis/authentication#operation/JWT
+// See: https://docs.dolby.io/interactivity/reference/authentication#jwt
 const getAPIAccessTokenAsync = () => {
     console.log('Get API Access Token');
     return getAccessTokenAsync('api.voxeet.com', '/v1/auth/token');
 }
 
-// See: https://dolby.io/developers/interactivity-apis/reference/rest-apis/conference#operation/postConferenceCreate
+// See: https://docs.dolby.io/interactivity/reference/conference#postconferencecreate
 const createConferenceAsync = async (alias, ownerExternalId) => {
     const body = JSON.stringify({
         alias: alias,
@@ -113,45 +119,25 @@ const createConferenceAsync = async (alias, ownerExternalId) => {
     return await postAsync('api.voxeet.com', '/v2/conferences/create', headers, body);
 };
 
-// See: https://dolby.io/developers/interactivity-apis/reference/rest-apis/conference#operation/postConferenceInvite
+// See: https://docs.dolby.io/interactivity/reference/conference#postconferenceinvite
 const getInvitationAsync = async (conferenceId, externalId) => {
     const participants = {};
-
-    if (conferenceId == '6c471277-86d8-4720-8be7-121aff08c6b5') {
-        participants[externalId] = {
-            permissions: [
-                "INVITE",
-                "JOIN",
-                "SEND_AUDIO",
-                "SEND_VIDEO",
-                "SHARE_SCREEN",
-                "SHARE_VIDEO",
-                "SHARE_FILE",
-                "SEND_MESSAGE",
-                //"RECORD",
-                //"STREAM",
-                //"KICK",
-                //"UPDATE_PERMISSIONS"
-            ]
-        };
-    } else {
-        participants[externalId] = {
-            permissions: [
-                //"INVITE",
-                "JOIN",
-                //"SEND_AUDIO",
-                "SEND_VIDEO",
-                "SHARE_SCREEN",
-                //"SHARE_VIDEO",
-                //"SHARE_FILE",
-                "SEND_MESSAGE",
-                //"RECORD",
-                //"STREAM",
-                //"KICK",
-                //"UPDATE_PERMISSIONS"
-            ]
-        };
-    }
+    participants[externalId] = {
+        permissions: [
+            "INVITE",
+            "JOIN",
+            "SEND_AUDIO",
+            "SEND_VIDEO",
+            "SHARE_SCREEN",
+            "SHARE_VIDEO",
+            "SHARE_FILE",
+            "SEND_MESSAGE",
+            //"RECORD",
+            //"STREAM",
+            //"KICK",
+            //"UPDATE_PERMISSIONS"
+        ]
+    };
 
 
     const body = JSON.stringify({
