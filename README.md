@@ -1,10 +1,11 @@
 # Sample Application for Conference Access Control
 
-Sample application that uses the Web SDK with Enhanced Conference Access Control. This project is based on the [voxeet-sdk-browser-gettingstarted](https://github.com/voxeet/voxeet-sdk-browser-gettingstarted) repo.
+Sample application that uses the Web SDK with Enhanced Conference Access Control. This project is based on the [comms-sdk-web-getting-started](https://github.com/dolbyio-samples/comms-sdk-web-getting-started) repo.
 
 ## Setup
 
 Clone this repo:
+
 ```bash
 git clone https://github.com/dolbyio-samples/dolbyio-web-conference-access-control
 ```
@@ -19,13 +20,13 @@ Create a new application in your dashboard on dolby.io, then go to the settings,
 
 ![Enhanced Conference Access Control](enhanced-conference-access-control.png)
 
-If you haven't done so already, create an account on [dolby.io](https://dolby.io/signup), it is free so do it today! Go to your dashboard and for the first application, get your `Consumer Key` and `Consumer Secret`.
+If you haven't done so already, create an account on [dolby.io](https://dolby.io/signup), it is free so do it today! Go to your dashboard and for the first application, get your `App Key` and `App Secret`.
 
 Create a `.env` file at the root of this folder and insert your consumer key and secret like that:
 
 ```
-CONSUMER_KEY=<Your consumer key>
-CONSUMER_SECRET=<Your consumer secret>
+APP_KEY=<Your app key>
+APP_SECRET=<Your app secret>
 ```
 
 Now, start the project with the npm command:
@@ -41,23 +42,6 @@ node server.js --port 8081
 ```
 
 Then you can access the web page at `http://localhost:8081`. You can change the port number with the flag `--port` in the node command.
-
-## Docker Image
-
-You can build your own Docker image with this project using the command:
-
-```bash
-docker build -t cat .
-```
-
-To run the container, you must provide the two environment variables `CONSUMER_KEY` and `CONSUMER_SECRET`. And you can map the port 8081 of the container to your local port 80.
-```bash
-docker run --rm -it -p 80:8081/tcp --env "CONSUMER_KEY=<value>" --env "CONSUMER_SECRET=<value>" cat:latest
-```
-
-Now you should be able to access the application from this page: http://localhost
-
-You can also get the latest docker image from this repo at https://github.com/dolbyio-samples/dolbyio-web-conference-access-control/pkgs/container/dolbyio-web-conference-access-control
 
 ## Use this project
 
