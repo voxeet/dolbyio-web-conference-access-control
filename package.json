@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/dolbyio-samples/dolbyio-web-conference-access-control#readme",
   "dependencies": {
-    "@dolbyio/dolbyio-rest-apis-client": "^3.2.0",
+    "@dolbyio/dolbyio-rest-apis-client": "^3.3.3",
     "commander": "^9.4.0",
     "dotenv": "^16.0.1",
     "express": "^4.18.1"

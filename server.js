@@ -30,7 +30,7 @@ const createConference = async (alias, ownerExternalId) => {
         liveRecording: false
     };
 
-    const jwt = await dolbyio.communications.authentication.getApiAccessToken(APP_KEY, APP_SECRET);
+    const jwt = await dolbyio.authentication.getApiAccessToken(APP_KEY, APP_SECRET);
     return await dolbyio.communications.conference.createConference(jwt, options);
 };
 
@@ -53,7 +53,7 @@ const getInvitation = async (conferenceId, externalId) => {
         ]
     };
     
-    const jwt = await dolbyio.communications.authentication.getApiAccessToken(APP_KEY, APP_SECRET);
+    const jwt = await dolbyio.authentication.getApiAccessToken(APP_KEY, APP_SECRET);
     return await dolbyio.communications.conference.invite(jwt, conferenceId, participants);
 };
 
