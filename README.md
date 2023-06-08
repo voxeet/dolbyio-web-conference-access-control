@@ -1,3 +1,5 @@
+[![License](https://img.shields.io/github/license/dolbyio-samples/dolbyio-web-conference-access-control)](LICENSE)
+
 # Sample Application for Conference Access Control
 
 Sample application that uses the Web SDK with Enhanced Conference Access Control. This project is based on the [comms-sdk-web-getting-started](https://github.com/dolbyio-samples/comms-sdk-web-getting-started) repo.

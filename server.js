@@ -22,16 +22,30 @@ if (APP_KEY.length <= 0 || APP_SECRET.length <= 0) {
     throw new Error('The App Key and/or Secret are missing!');
 }
 
+const getAPIAccessToken = async (scope) => {
+    console.log('Get API Access Token');
+    return await dolbyio.authentication.getApiAccessToken(APP_KEY, APP_SECRET, 600, [scope]);
+};
+
+const getClientAccessToken = async () => {
+    const apiToken = await getAPIAccessToken('comms:client_access_token:create');
+
+    console.log('Get Client Access Token');
+    return await dolbyio.communications.authentication.getClientAccessTokenV2({
+        accessToken: apiToken,
+        sessionScope: ['notifications:set', 'file:convert'],
+    });
+};
+
 const createConference = async (alias, ownerExternalId) => {
-    const options = {
+    const jwt = await getAPIAccessToken('comms:conf:create');
+
+    return await dolbyio.communications.conference.createConference(jwt, {
         ownerExternalId: ownerExternalId,
         alias: alias,
         dolbyVoice: true,
-        liveRecording: false
-    };
-
-    const jwt = await dolbyio.authentication.getApiAccessToken(APP_KEY, APP_SECRET);
-    return await dolbyio.communications.conference.createConference(jwt, options);
+        liveRecording: LIVE_RECORDING,
+    });
 };
 
 const getInvitation = async (conferenceId, externalId) => {
@@ -53,55 +67,57 @@ const getInvitation = async (conferenceId, externalId) => {
         ]
     };
     
-    const jwt = await dolbyio.authentication.getApiAccessToken(APP_KEY, APP_SECRET);
+    const jwt = await getAPIAccessToken('comms:conf:admin');
     return await dolbyio.communications.conference.invite(jwt, conferenceId, participants);
 };
 
-app.get('/access-token', function (request, response) {
-    console.log(`[GET] ${request.url}`);
+app.get('/access-token', async (request, response) => {
+    console.log('[GET] %s', request.url);
 
-    dolbyio.communications.authentication.getClientAccessToken(APP_KEY, APP_SECRET)
-        .then(accessToken => {
-            response.set('Content-Type', 'application/json');
-            response.send(JSON.stringify(accessToken));
-        })
-        .catch(() => {
-            response.status(500);
-        });
+    try {
+        const accessToken = await getClientAccessToken();
+        response.set('Content-Type', 'application/json');
+        response.send(JSON.stringify(accessToken));
+    } catch (error) {
+        console.error(error);
+        response.status(500);
+        response.send('An error happened.');
+    }
 });
 
-app.post('/conference', function (request, response) {
-    console.log(`[POST] ${request.url}`, request.body);
+app.post('/conference', async (request, response) => {
+    console.log('[POST] %s', request.url, request.body);
 
     const alias = request.body.alias;
     const ownerExternalId = request.body.ownerExternalId;
 
-    createConference(alias, ownerExternalId)
-        .then(conference => {
-            response.set('Content-Type', 'application/json');
-            response.send(JSON.stringify(conference));
-        })
-        .catch(() => {
-            response.status(500);
-        });
+    try {
+        const conference = await createConference(alias, ownerExternalId);
+        response.set('Content-Type', 'application/json');
+        response.send(JSON.stringify(conference));
+    } catch (error) {
+        console.error(error);
+        response.status(500);
+        response.send('An error happened.');
+    }
 });
 
-app.post('/get-invited', function (request, response) {
-    console.log(`[POST] ${request.url}`, request.body);
+app.post('/get-invited', async (request, response) => {
+    console.log('[POST] %s', request.url, request.body);
 
     const conferenceId = request.body.conferenceId;
     const externalId = request.body.externalId;
 
-    getInvitation(conferenceId, externalId)
-        .then(accessToken => {
-            response.set('Content-Type', 'application/json');
-            response.send(JSON.stringify({accessToken: accessToken[externalId]}));
-        })
-        .catch(() => {
-            response.status(500);
-        });
+    try {
+        const accessToken = await getInvitation(conferenceId, externalId);
+        response.set('Content-Type', 'application/json');
+        response.send(JSON.stringify({accessToken: accessToken[externalId]}));
+    } catch (error) {
+        console.error(error);
+        response.status(500);
+        response.send('An error happened.');
+    }
 });
-
 
 // Extract the port number from the command argument
 program.option('-p, --port <portNumber>', 'Port number to start the HTTP server on.');

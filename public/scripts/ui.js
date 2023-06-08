@@ -23,7 +23,7 @@ const initUI = () => {
   const joinConference = (conferenceId, conferenceAccessToken) => {
     VoxeetSDK.conference.fetch(conferenceId)
       .then(conference => {
-        // See: https://dolby.io/developers/interactivity-apis/client-sdk/reference-javascript/model/joinoptions
+        // See: https://docs.dolby.io/communications-apis/docs/js-client-sdk-model-joinoptions
         const joinOptions = {
           conferenceAccessToken: conferenceAccessToken,
           constraints: {
