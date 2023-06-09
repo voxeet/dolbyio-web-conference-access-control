@@ -44,28 +44,30 @@ const createConference = async (alias, ownerExternalId) => {
         ownerExternalId: ownerExternalId,
         alias: alias,
         dolbyVoice: true,
-        liveRecording: LIVE_RECORDING,
+        liveRecording: false,
     });
 };
 
 const getInvitation = async (conferenceId, externalId) => {
-    const participants = {};
-    participants[externalId] = {
-        permissions: [
-            "INVITE",
-            "JOIN",
-            "SEND_AUDIO",
-            "SEND_VIDEO",
-            "SHARE_SCREEN",
-            "SHARE_VIDEO",
-            "SHARE_FILE",
-            "SEND_MESSAGE",
-            //"RECORD",
-            //"STREAM",
-            //"KICK",
-            //"UPDATE_PERMISSIONS"
-        ]
-    };
+    const participants = [
+        {
+            externalId: externalId,
+            permissions: [
+                "INVITE",
+                "JOIN",
+                "SEND_AUDIO",
+                "SEND_VIDEO",
+                "SHARE_SCREEN",
+                "SHARE_VIDEO",
+                "SHARE_FILE",
+                "SEND_MESSAGE",
+                //"RECORD",
+                //"STREAM",
+                //"KICK",
+                //"UPDATE_PERMISSIONS"
+            ]
+        }
+    ];
     
     const jwt = await getAPIAccessToken('comms:conf:admin');
     return await dolbyio.communications.conference.invite(jwt, conferenceId, participants);
