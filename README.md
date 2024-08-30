@@ -1,3 +1,5 @@
+# :warning: This repository is no longer maintained :warning:
+
 [![License](https://img.shields.io/github/license/dolbyio-samples/dolbyio-web-conference-access-control)](LICENSE)
 
 # Sample Application for Conference Access Control
